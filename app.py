@@ -1,25 +1,40 @@
-from fastapi import FastAPI
-from fastapi.responses import HTMLResponse
+import os
+from html import escape as html_escape
+
 import requests
 from apscheduler.schedulers.background import BackgroundScheduler
+from dotenv import load_dotenv
+from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
+
 from fakenews import predict_news
+
+load_dotenv()
 
 app = FastAPI()
 
-API_KEY = "27a10a2a7a974c3293d4fcaf83cee6ee"
+API_KEY = os.getenv("NEWSAPI_KEY")
 
 news_results = []
 
 def fetch_news():
     global news_results
+    if not API_KEY:
+        return
+
     url = f"https://newsapi.org/v2/top-headlines?country=us&pageSize=5&apiKey={API_KEY}"
-    data = requests.get(url).json()
+    try:
+        data = requests.get(url, timeout=10).json()
+    except requests.RequestException:
+        return
 
     articles = data.get("articles", [])
     results = []
 
     for a in articles:
-        title = a["title"]
+        title = a.get("title")
+        if not title:
+            continue
         label, score = predict_news(title)
 
         results.append({
@@ -174,7 +189,7 @@ def home():
 
         html += f"""
         <div class="card">
-            <p>{n['title']}</p>
+            <p>{html_escape(n['title'])}</p>
             <p class="{cls}">{n['label']} ({n['score']}%)</p>
         </div>
         """
@@ -231,7 +246,7 @@ def predict(news: str):
 
     <body>
 
-    <h2>{news}</h2>
+    <h2>{html_escape(news)}</h2>
 
     <h1 style="color:{color}">{label}</h1>
 

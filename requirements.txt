@@ -1,0 +1,14 @@
+torch
+transformers
+scikit-learn
+pandas
+matplotlib
+fastapi
+uvicorn
+requests
+apscheduler
+python-dotenv
+
+# dev / test
+pytest
+httpx
