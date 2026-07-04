@@ -1,0 +1,7 @@
+{
+  "test_samples": 1500,
+  "accuracy": 0.9987,
+  "precision_fake": 0.9973,
+  "recall_fake": 1.0,
+  "f1_fake": 0.9987
+}
