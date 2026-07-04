@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Environments
+venv/
+.venv/
+.env
+
+# Model artifacts & training output (too large for git)
+bert_model/
+results/
+logs/
+*.bin
+*.safetensors
+*.pt
+
+# Dataset (download from Kaggle — see README)
+Fake.csv
+True.csv
+test_split.csv
+
+# Runtime data
+history.json
